@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>{{ course.title }} ({{ course.code }})</h2>
+<p>任課老師：{{ course.teacher }}</p>
+
+
+<h3>修課學生名單</h3>
+<table border="1" cellpadding="6">
+    <tr><th>學生</th><th>期中</th><th>期末</th><th>平均</th></tr>
+    {% for e in enrollments %}
+    <tr>
+        <td>{{ e.student.name }}</td>
+        <td>{{ e.midterm_score }}</td>
+        <td>{{ e.final_score }}</td>
+        <td>{{ e.average|floatformat:2 }}</td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="4">尚無學生修課</td></tr>
+    {% endfor %}
+</table>
+
+
+<a href="/grades/">回主頁</a>
+{% endblock %}

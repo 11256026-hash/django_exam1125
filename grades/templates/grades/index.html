@@ -1,0 +1,42 @@
+{% extends 'grades/base.html' %}
+
+{% block content %}
+<h1>歡迎, {{ student.name }}</h1>
+<p><a href="{% url 'logout' %}">登出</a></p>
+
+<h2>修課清單</h2>
+<table border="1" cellpadding="6">
+  <tr>
+    <th>課名</th>
+    <th>期中</th>
+    <th>期末</th>
+    <th>平均</th>
+    <th>動作</th>
+  </tr>
+
+  {% for e in enrollments %}
+  <tr>
+    <td><a href="{% url 'course_detail' e.course.id %}">{{ e.course.title }}</a></td>
+    <td>{{ e.midterm_score }}</td>
+    <td>{{ e.final_score }}</td>
+    <td>{{ e.average|floatformat:2 }}</td>
+    <td><a href="{% url 'unenroll_course' e.course.id %}">退選</a></td>
+  </tr>
+  {% empty %}
+  <tr>
+    <td colspan="5">目前尚未修課</td>
+  </tr>
+  {% endfor %}
+</table>
+
+{% if overall_avg %}
+<p>整體平均：{{ overall_avg|floatformat:2 }}</p>
+{% endif %}
+
+<h2>可選課程</h2>
+<ul>
+  {% for c in courses %}
+    <li>{{ c.title }} - <a href="{% url 'enroll_course' c.id %}">加選</a></li>
+  {% endfor %}
+</ul>
+{% endblock %}

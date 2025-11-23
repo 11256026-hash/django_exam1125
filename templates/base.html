@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}成績系統{% endblock %}</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        nav a { margin-right: 15px; text-decoration: none; color: blue; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+        th { background-color: #f2f2f2; }
+        .btn { padding: 6px 12px; background-color: #007bff; color: white; border-radius: 4px; text-decoration: none; }
+        .btn:hover { background-color: #0056b3; }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="{% url 'index' %}">首頁</a>
+        <a href="{% url 'add_course' %}">加選</a>
+    </nav>
+    <hr>
+    {% block content %}
+    {% endblock %}
+</body>
+</html>
