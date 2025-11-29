@@ -1,15 +1,12 @@
-# grades/forms.py
 from django import forms
-from .models import Course, Enrollment
-
+from .models import Course, Student
 
 class CourseForm(forms.ModelForm):
     class Meta:
         model = Course
         fields = ['title', 'code', 'teacher']
 
-
-class EnrollmentForm(forms.ModelForm):
+class EditProfileForm(forms.ModelForm):
     class Meta:
-        model = Enrollment
-        fields = ['student', 'course', 'midterm_score', 'final_score']
+        model = Student
+        fields = ['display_name', 'avatar']

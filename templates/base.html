@@ -1,10 +1,8 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>{% block title %}成績系統{% endblock %}</title>
+    <title>Grades App</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
         nav a { margin-right: 15px; text-decoration: none; color: blue; }
         table { border-collapse: collapse; width: 100%; }
         th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
@@ -15,8 +13,12 @@
 </head>
 <body>
     <nav>
-        <a href="{% url 'index' %}">首頁</a>
-        <a href="{% url 'add_course' %}">加選</a>
+        <!-- 使用 app_name 前綴 -->
+        <a href="{% url 'grades:index' %}">首頁</a>
+        <a href="{% url 'grades:add_course' %}">加選</a>
+        <a href="{% url 'grades:dashboard' %}">個人首頁</a>
+        <a href="{% url 'grades:logout' %}">登出</a>
+        <a href="{% url 'grades:student_login' %}">學生登入</a>
     </nav>
     <hr>
     {% block content %}

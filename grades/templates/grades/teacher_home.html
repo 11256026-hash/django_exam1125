@@ -1,0 +1,23 @@
+{% extends 'grades/base.html' %}
+{% block content %}
+<h1>歡迎 {{ request.user.last_name }}{{ request.user.first_name }}老師</h1>
+
+<ul>
+  <li><a href="{% url 'grades:teacher_add_course' %}">新增課程</a></li>
+  <li><a href="{% url 'grades:teacher_stu_list' %}">查看學生列表</a></li>
+</ul>
+
+<h2>我的課程</h2>
+<ul>
+  {% for c in courses %}
+    <li>
+        {{ c.title }}
+        - <a href="{% url 'grades:teacher_course_students' c.id %}">學生名單</a>
+        - <a href="{% url 'grades:delete_course' c.id %}" onclick="return confirm('確定刪除嗎？');">刪除</a>
+    </li>
+  {% empty %}
+    <li>尚未開課</li>
+  {% endfor %}
+</ul>
+
+{% endblock %}

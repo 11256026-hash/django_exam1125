@@ -1,0 +1,21 @@
+{% extends 'grades/base.html' %}
+{% block content %}
+<h2>{{ course.title }} 的學生名單</h2>
+
+<a href="{% url 'grades:teacher_home' %}" class="btn btn-secondary">回首頁</a>
+
+<table border="1">
+<tr><th>學生</th><th>期中</th><th>期末</th><th>操作</th></tr>
+{% for e in enrollments %}
+<tr>
+<td>{{ e.student.name }}</td>
+<td>{{ e.midterm_score }}</td>
+<td>{{ e.final_score }}</td>
+<td><a href="{% url 'grades:teacher_edit_score' e.id %}">修改成績</a></td>
+
+</tr>
+{% empty %}
+<tr><td colspan="4">尚無學生</td></tr>
+{% endfor %}
+</table>
+{% endblock %}

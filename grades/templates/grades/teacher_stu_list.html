@@ -1,0 +1,29 @@
+{% extends 'grades/base.html' %}
+{% block content %}
+<h1>所有學生列表</h1>
+
+{% if students %}
+<table border="1">
+  <tr>
+    <th>學號</th>
+    <th>姓名</th>
+    <th>所屬課程</th>
+  </tr>
+
+  {% for s in students %}
+  <tr>
+    <td>{{ s.student_id }}</td>
+    <td>{{ s.name }}</td>
+    <td>
+      {% for c in s.course.all %}
+        {{ c.title }}{% if not forloop.last %}, {% endif %}
+      {% endfor %}
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+{% else %}
+<p>目前沒有學生。</p>
+{% endif %}
+
+{% endblock %}

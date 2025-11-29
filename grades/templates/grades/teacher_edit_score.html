@@ -1,0 +1,12 @@
+{% extends 'grades/base.html' %}
+{% block content %}
+<h2>編輯 {{ enroll.student.name }} 的成績 ({{ enroll.course.title }})</h2>
+
+<form method="post">
+    {% csrf_token %}
+    <label>期中: <input name="midterm_score" value="{{ enroll.midterm_score }}"></label><br>
+    <label>期末: <input name="final_score" value="{{ enroll.final_score }}"></label><br>
+    <button type="submit">儲存</button>
+    <a href="{% url 'grades:teacher_course_students' course_id=enroll.course.id %}">取消</a>
+</form>
+{% endblock %}

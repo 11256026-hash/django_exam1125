@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>成績管理系統 - 首頁</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+        }
+        h1 { font-size: 30px; }
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            margin: 10px;
+            border-radius: 6px;
+        }
+        .btn:hover { background: #0056b3; }
+    </style>
+</head>
+<body>
+    <h1>歡迎使用成績管理系統</h1>
+    <p>請選擇登入身份：</p>
+    <a class="btn" href="{% url 'grades:student_login' %}">學生登入</a>
+    <a class="btn" href="{% url 'grades:teacher_login' %}">老師登入</a>
+    <a class="btn" href="{% url 'grades:register' %}">學生註冊</a>
+
+</body>
+</html>
