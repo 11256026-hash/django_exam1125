@@ -2,6 +2,7 @@
 {% block content %}
 <h2>{{ course.title }} ({{ course.code }})</h2>
 <p>任課老師: {{ course.teacher }}</p>
+
 <h3>修課學生</h3>
 <table border="1" cellpadding="6">
   <tr><th>學生</th><th>期中</th><th>期末</th><th>平均</th></tr>
@@ -16,5 +17,33 @@
   <tr><td colspan="4">尚無學生</td></tr>
   {% endfor %}
 </table>
+
+<hr>
+
+<h2>留言板</h2>
+
+<form method="POST" action="{% url 'grades:add_message' course.id %}">
+    {% csrf_token %}
+    <textarea name="content" rows="3" cols="50" placeholder="留下你的留言"></textarea><br>
+    <button type="submit">送出留言</button>
+</form>
+
+<hr>
+
+{% if messages %}
+    {% for msg in messages %}
+    <div style="border:1px solid #ccc; padding:5px; margin-bottom:5px;">
+        <strong>{{ msg.student.name }}</strong> 說：
+        <p>{{ msg.content }}</p>
+        {% if msg.student.user == request.user %}
+          <a href="{% url 'grades:edit_message' msg.id %}">編輯</a> |
+          <a href="{% url 'grades:delete_message' msg.id %}" onclick="return confirm('確定要刪除這則留言嗎？');">刪除</a>
+        {% endif %}
+    </div>
+    {% endfor %}
+{% else %}
+    <p>目前沒有留言</p>
+{% endif %}
+
 <a href="{% url 'grades:index' %}">回首頁</a>
 {% endblock %}

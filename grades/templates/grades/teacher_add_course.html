@@ -1,6 +1,7 @@
 {% extends 'grades/base.html' %}
 {% block content %}
 <h2>新增課程</h2>
+<a href="{% url 'grades:teacher_home' %}" class="btn btn-secondary">回首頁</a>
 <form method="post">{% csrf_token %}
   <label>課名: <input name="title" required></label><br>
   <label>課號: <input name="code" required></label><br>

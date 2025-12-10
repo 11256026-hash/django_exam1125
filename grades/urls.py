@@ -25,5 +25,11 @@ urlpatterns = [
     path('teacher/enrollment/<int:enroll_id>/edit/', views.teacher_edit_score, name='teacher_edit_score'),
     path('teacher/students/', views.student_list, name='student_list'),
     path('teacher/students/', views.teacher_stu_list, name='teacher_stu_list'),
+
+    path('course/<int:course_id>/', views.course_detail, name='course_detail'),
+    path('course/<int:course_id>/add_message/', views.add_message, name='add_message'),
+    path('message/<int:message_id>/edit/', views.edit_message, name='edit_message'),
+    path('message/<int:message_id>/delete/', views.delete_message, name='delete_message'),
+
 ]
 

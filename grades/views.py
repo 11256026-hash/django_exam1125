@@ -4,8 +4,8 @@ from .models import Student, Course, Teacher
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.models import User
-
-from .models import Student, Teacher, Course, Enrollment
+from django.http import HttpResponse
+from .models import Student, Teacher, Course, Enrollment, CourseMessage
 from .forms import EditProfileForm
 
 def home_view(request):
@@ -114,8 +114,21 @@ def unenroll_course(request, course_id):
 @login_required
 def course_detail(request, course_id):
     course = get_object_or_404(Course, id=course_id)
+
+    # 1. 抓該課程底下的所有留言
+    messages = CourseMessage.objects.filter(course=course).order_by('-created_at')
+
+    # 2. 取得選這堂課的學生資料（你原本就有）
     enrollments = Enrollment.objects.filter(course=course).select_related("student")
-    return render(request, "grades/course_detail.html", {"course": course, "enrollments": enrollments})
+    
+    messages_list = CourseMessage.objects.filter(course=course).select_related("student").order_by('-id')
+
+    return render(request, "grades/course_detail.html", {
+        "course": course,
+        "enrollments": enrollments,
+        "messages":  messages_list,
+    })
+
 
 
 @login_required
@@ -198,3 +211,72 @@ def student_list(request):
     
     return render(request, "grades/student_list.html", {"students": students, "teacher": teacher})
 
+@login_required
+def course_detail(request, course_id):
+    course = get_object_or_404(Course, id=course_id)
+    enrollments = Enrollment.objects.filter(course=course).select_related("student")
+    
+    # 取得該課程的所有留言
+    messages_list = CourseMessage.objects.filter(course=course).select_related("student").order_by('-created_at')
+    
+    return render(request, "grades/course_detail.html", {
+        "course": course,
+        "enrollments": enrollments,
+        "messages": messages_list,
+    })
+
+@login_required
+def course_detail(request, course_id):
+    course = get_object_or_404(Course, id=course_id)
+    enrollments = Enrollment.objects.filter(course=course).select_related("student")
+    
+    # 使用 view 傳入的 messages
+    messages_list = CourseMessage.objects.filter(course=course).select_related("student").order_by('-created_at')
+    
+    return render(request, "grades/course_detail.html", {
+        "course": course,
+        "enrollments": enrollments,
+        "messages": messages_list,
+    })
+
+@login_required
+def add_message(request, course_id):
+    course = get_object_or_404(Course, id=course_id)
+    
+    if request.method == 'POST':
+        content = request.POST.get('content', '').strip()
+        if content:
+            CourseMessage.objects.create(
+                course=course,
+                student=request.user.student,
+                content=content
+            )
+    return redirect('grades:course_detail', course_id=course.id)
+
+@login_required
+def edit_message(request, message_id):
+    message = get_object_or_404(CourseMessage, id=message_id)
+
+    if request.user != message.student.user:
+        return HttpResponse("你不能修改別人的留言")
+
+    if request.method == "POST":
+        new_content = request.POST.get("content").strip()
+        if new_content:
+            message.content = new_content
+            message.save()
+        return redirect('grades:course_detail', message.course.id)
+
+    return render(request, "grades/edit_message.html", {"message": message})
+
+@login_required
+def delete_message(request, message_id):
+    message = get_object_or_404(CourseMessage, id=message_id)
+
+    # 只能刪自己留言
+    if request.user != message.student.user:
+        return HttpResponse("你不能刪除別人的留言")
+
+    course_id = message.course.id
+    message.delete()
+    return redirect('grades:course_detail', course_id=course_id)

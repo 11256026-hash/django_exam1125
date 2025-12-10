@@ -1,0 +1,7 @@
+<h2>編輯留言</h2>
+
+<form method="POST">
+    {% csrf_token %}
+    <textarea name="content" rows="3" cols="50">{{ message.content }}</textarea><br>
+    <button type="submit">更新留言</button>
+</form>
